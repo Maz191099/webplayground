@@ -59,6 +59,32 @@
               {% endfor %}
             </div>
             <!-- Aquí crearemos el formulario -->
+            <textarea id="content" class="form-control mb-2" rows="2" placeholder="Escribe tu mensaje aquí"></textarea>
+
+            <button id="send" class="btn btn-outline-success btn-sm btn-block" disabled>Peticion asincrona</button>
+            <script>
+              var send = document.getElementById("send");
+              send.addEventListener("click", function(){
+                var content = encodeURIComponent(document.getElementById("content").value);
+                if (content.length > 0){
+                  const url = "{% url 'messenger:add' thread.pk %}" + "?content="+content;
+                  fetch(url, {'credentials':'include'}).then(response => response.json()).then(function(data){
+                    alert(data.created);
+                  })
+                }
+              })
+              
+              // evento para controlar el boton send
+              var content = document.getElementById("content")
+              content.addEventListener("keyup", function(){
+                if (!this.checkValidity() || !this.value){
+                  send.disabled = true
+                } else{
+                  send.disabled = false
+                }
+              })
+
+            </script>
           </div>
         </div>
     </div>
